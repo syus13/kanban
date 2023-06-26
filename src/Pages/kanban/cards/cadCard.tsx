@@ -7,7 +7,7 @@ export function CadCard(){
             <NewCard>
                         <input type='text' placeholder='Título' name='title' className='title'/>
                         <textarea placeholder='Conteúdo' name='content' className='content' rows={7} cols={35}/>
-                        <img src={criar} />
+                        <img  src={criar} />
             </NewCard>
                
         
