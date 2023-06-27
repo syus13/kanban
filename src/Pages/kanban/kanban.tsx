@@ -8,14 +8,36 @@ import {
   TitleColumn,
 } from "./styleKanban";
 import { CadCard } from "./cards/cadCard";
+import api from "../../services/requisicaoCards"
+import {useState, useEffect} from "react"
 
 export default function Kanban() {
+
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    
+    async function fetchUserName() {
+      try {
+        const response = await api.get("/user");
+        const userName = response.data.name; 
+        setUserName(userName);
+      } catch (error) {
+        console.error("Erro ao buscar o nome do usuário:", error);
+      }
+    }
+
+    fetchUserName();
+  }, []);
+
+
+
   return (
     <>
       <Header>
         <TextHeader>Arnia Trello</TextHeader>
         <Welcome>
-          <div className="welcomeUser">Olá, Usuário</div>
+          <div className="welcomeUser">Olá, {userName}</div>
 
           <LinkEnd>Sair</LinkEnd>
         </Welcome>
@@ -29,17 +51,17 @@ export default function Kanban() {
 
         <Column>
           <TitleColumn>To Do</TitleColumn>
-          <CadCard />
+          
         </Column>
 
         <Column>
           <TitleColumn>Doing</TitleColumn>
-          <CadCard />
+          
         </Column>
 
         <Column>
           <TitleColumn>Done</TitleColumn>
-          <CadCard />
+          
         </Column>
       </Main>
     </>

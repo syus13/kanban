@@ -1,12 +1,4 @@
-type RegisterParams = {
-  name: string;
-  email: string;
-  password: string;
-};
-
-type RegisterResponse = {
-  token: string;
-};
+import { RegisterParams, RegisterResponse } from "./types";
 
 export const RegisterService = async ({
   name,

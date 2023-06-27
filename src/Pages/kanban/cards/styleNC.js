@@ -34,5 +34,6 @@ export const NewCard = styled.div`
 
   > img {
     width: 26px;
+    cursor: pointer;
   }
 `;

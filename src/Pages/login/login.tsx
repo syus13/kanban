@@ -2,21 +2,17 @@ import { useState, ChangeEvent, MouseEvent } from "react";
 import { Container, Input, Form, Link as Style } from "./styleLogin";
 import { loginService } from "../../services/apiLogin";
 import { Link, useNavigate } from "react-router-dom";
-
-type Values = {
-  email: string;
-  password: string;
-};
+import {ValuesL} from "../../services/types"
 
 export default function Login() {
   const navigate = useNavigate();
 
-  const [values, setValues] = useState<Values>({
+  const [values, setValues] = useState<ValuesL>({
     email: "",
     password: "",
   });
 
-  const [errors, setErrors] = useState<Values>({
+  const [errors, setErrors] = useState<ValuesL>({
     email: "",
     password: "",
   });

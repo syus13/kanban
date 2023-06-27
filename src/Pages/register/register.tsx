@@ -2,24 +2,18 @@ import { useState, ChangeEvent, MouseEvent } from "react";
 import { Container, Input, Form } from "./styleRegister";
 import { RegisterService } from "../../services/apiRegister";
 import { useNavigate } from "react-router-dom";
-
-type Values = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
+import {ValuesR} from "../../services/types"
 
 export default function Register() {
   const navigate = useNavigate();
-  const [values, setValues] = useState<Values>({
+  const [values, setValues] = useState<ValuesR>({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const [errors, setErrors] = useState<Values>({
+  const [errors, setErrors] = useState<ValuesR>({
     name: "",
     email: "",
     password: "",
