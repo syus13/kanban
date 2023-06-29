@@ -5,7 +5,7 @@ export default axios.create({
     headers: {
         "x-api-key": "52a8b954-e25d-4cc5-86e5-c32e92f994bb",
         "Content-Type": "application/json",
-        Authorization: localStorage.getItem("AUTH_TOKEN") || "",
+       
       },
 })
 

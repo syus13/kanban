@@ -1,19 +1,27 @@
-import { isAxiosError } from "axios"
-import api from "./requisicaoCards"
-import { CadCardService } from "./types"
+import { isAxiosError } from "axios";
+import api from "./requisicaoCards";
+import { CadCardService } from "./types";
 
+export default async function cardService(title: string, content: string) {
+  try {
+    const token = localStorage.getItem("AUTH-TOKEN");
+    const result = await api.post<CadCardService>(
+      "/card",
+      {
+        title,
+        content,
+      },
+      {
+        headers: {
+          Authorization:  token, 
+        },
+      }
+    );
 
-export default async function CardService(title: string, content: string) {
-    try {
-        const result = await api.post<CadCardService>("/card", {
-            title,
-            content,
-        })
-
-        return result.data
-    } catch (error) {
-        if (isAxiosError(error)) {
-            return error.response?.data
-        }
+    return result.data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      return error.response?.data;
     }
+  }
 }

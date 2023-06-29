@@ -10,6 +10,11 @@ import {
 import { CadCard } from "./cards/cadCard";
 import api from "../../services/requisicaoCards"
 import {useState, useEffect} from "react"
+import ReadCards from "../kanban/cards/readCard"
+import { Card as CardsType} from "../../services/types";
+
+function filterByColumn(cards: CardsType, column: 'TODO'|'DOING'|'DONE'): CardsType {
+  return cards.filter(card => card.column === column)
 
 export default function Kanban() {
 
@@ -51,19 +56,21 @@ export default function Kanban() {
 
         <Column>
           <TitleColumn>To Do</TitleColumn>
-          
+          <Cards cards={filterByColumn(cards, 'TODO')} />
         </Column>
 
         <Column>
           <TitleColumn>Doing</TitleColumn>
-          
+          <Cards cards={filterByColumn(cards, 'DOING')} />
         </Column>
 
         <Column>
           <TitleColumn>Done</TitleColumn>
-          
+          <Cards cards={filterByColumn(cards, 'DONE')} />
         </Column>
+        
       </Main>
     </>
   );
+}
 }

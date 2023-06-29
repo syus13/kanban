@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, MouseEvent } from "react";
-import { NewCard } from "./styleNC"
+import { NewCard } from "./styledCards"
 import { criar } from "./cardImg"
-import CardService from"../../../services/apiCadCard"
+import cardService from "../../../services/apiCadcard"
 import { ValuesCadCard } from "../../../services/types";
 
 
@@ -25,12 +25,12 @@ export function CadCard() {
 
     const handleRegisterCard = async () => {
         try {
-          const result = await CardService(values.title, values.content);
+          const result = await cardService(values.title, values.content);
           console.log("Dados gravados na API:", result);
-          // Faça algo com a resposta da API, se necessário
+          
         } catch (error) {
           console.error("Erro ao gravar dados na API:", error);
-          // Trate o erro de acordo com sua necessidade
+          
         }
       };
       
@@ -57,7 +57,8 @@ export function CadCard() {
                     cols={35}
                     value={values.content}
                     onChange={handleChange}
-                />            
+                />  
+                          
                 
         <img onClick={handleRegisterCard} src={criar} alt="Criar" />
     

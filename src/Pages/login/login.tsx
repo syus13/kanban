@@ -57,6 +57,7 @@ export default function Login() {
 
     try {
       const result = await loginService(values);
+      localStorage.setItem("AUTH-TOKEN", result.token)
       navigate("/kanban");
     } catch (e) {
       if (e instanceof Error) {

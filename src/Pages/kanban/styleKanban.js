@@ -48,10 +48,10 @@ export const Main = styled.div`
 `;
 export const Column = styled.div`
   font-family: "Poppins";
-  width: 305px;
+  width: 250px;
   height: 877px;
   border-radius: 7px;
-  background-color: black;
+  background-color: #EAEAEA;
   padding: 20px;
 `;
 export const TitleColumn = styled.div`
