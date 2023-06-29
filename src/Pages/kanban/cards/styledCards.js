@@ -81,4 +81,13 @@ line-height: 24px;
   }
 `
 
+export const Title = styled.div`
+display: flex;
+    align-items: center;
+    justify-content: space-between;
+font-size:20px;
+font-weight: 700;
+line-height: 30px;
+`
+
 

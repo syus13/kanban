@@ -15,7 +15,7 @@ export default function ReadCards({cards}: PropsReadCard):JSXElement {
         localStorage.getItem("AUTH-TOKEN") || ""
       );
 
-    fasync function moveTo(card: Card, direction: 'left' | 'right') {
+    async function moveTo(card: Card, direction: 'left' | 'right') {
         let column = '';
     
         if (card.column === 'TODO') {
@@ -27,7 +27,7 @@ export default function ReadCards({cards}: PropsReadCard):JSXElement {
         }
     
         try {
-          const response = await api.put(`/cards/${card._id}`, {
+          const response = await api.put(`/card/${card._id}`, {
             title: card.title,
             content: card.content,
             column: column
@@ -46,33 +46,35 @@ export default function ReadCards({cards}: PropsReadCard):JSXElement {
     
 
     return (
-    
-        <Rcard>
-            {cards.map((card) => (
-                <SCard className="card" key={card._id}>
-                    <div className="title">
-                        <div>{card.title}</div>
-                        <img src={Img.editar} />
-                    </div>
-
-                    <div className="content">
-                        {card.column}
-                    </div>
-                    <div className="changeColumn">
-                        {card.column !== 'TODO' &&
-                            <img src={Img.voltar} onClick={() => moveTo(card, 'left')} />
-
-                        }
-                        {card.column !== 'DONE' &&
-                            <img src={Img.avançar} onClick={() => moveTo(card, 'right')} />
-
-                        }
-
-                    </div>
-
-                </SCard>
-            ))}
-        </Rcard>
-    
+        <RCard>
+        {cards.map((card) => (
+          <SCard className="card" key={card._id}>
+            <div className="title">
+              <div>{card.title}</div>
+              <img src={Img.editar} alt="Editar" />
+            </div>
+  
+            <div className="content">{card.column}</div>
+            <div className="changeColumn">
+              {card.column !== "TODO" && (
+                <img
+                  src={Img.voltar}
+                  alt="Mover para a esquerda"
+                  onClick={() => moveTo(card, "left")}
+                />
+              )}
+              {card.column !== "DONE" && (
+                <img
+                  src={Img.avançar}
+                  alt="Mover para a direita"
+                  onClick={() => moveTo(card, "right")}
+                />
+              )}
+            </div>
+          </SCard>
+        ))}
+      </RCard>
     )
+  
+    
 
