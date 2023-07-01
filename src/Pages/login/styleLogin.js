@@ -63,7 +63,7 @@ export const Input = styled.div`
     padding-left: 10px;
   }
 `;
-export const Link = styled.div`
+export const Style = styled.div`
   margin-top: 15px;
   font-weight: 400;
   font-size: 16px;

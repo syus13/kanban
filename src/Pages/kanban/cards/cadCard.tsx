@@ -1,11 +1,11 @@
 import { useState, ChangeEvent, MouseEvent } from "react";
 import { NewCard } from "./styledCards"
 import { criar } from "./cardImg"
-import cardService from "../../../services/apiCadcard"
+import cardService from "../../../services/apiPostCard"
 import { ValuesCadCard } from "../../../services/types";
 
 
-export function CadCard() {
+export default function CadCard() {
 
 
     const [values, setValues] = useState<ValuesCadCard>({
@@ -26,17 +26,10 @@ export function CadCard() {
     const handleRegisterCard = async () => {
         try {
           const result = await cardService(values.title, values.content);
-          console.log("Dados gravados na API:", result);
+          setValues({ title: "", content: "" })
           
-        } catch (error) {
-          console.error("Erro ao gravar dados na API:", error);
-          
-        }
+        } catch (error) {}
       };
-      
-
-
-
 
         return (
 

@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, MouseEvent } from "react";
-import { Container, Input, Form, Link as Style } from "./styleLogin";
+import * as S from "./styleLogin";
 import { loginService } from "../../services/apiLogin";
 import { Link, useNavigate } from "react-router-dom";
 import {ValuesL} from "../../services/types"
@@ -67,13 +67,13 @@ export default function Login() {
   };
 
   return (
-    <Container>
+    <S.Container>
       <div className="h1"> Arnia Trello</div>
 
       {error !== "" && <h1>{error}</h1>}
 
-      <Form>
-        <Input>
+      <S.Form>
+        <S.Input>
           <label htmlFor="email">E-mail</label>
           <input
             type="email"
@@ -82,9 +82,9 @@ export default function Login() {
             required
             onChange={handleChange}
           />
-        </Input>
+        </S.Input>
 
-        <Input>
+        <S.Input>
           <label htmlFor="password">Senha</label>
           <input
             type="password"
@@ -93,16 +93,16 @@ export default function Login() {
             required
             onChange={handleChange}
           />
-        </Input>
-      </Form>
+        </S.Input>
+      </S.Form>
 
       <button type="submit" onClick={handleLogin}>
         ENTRAR
       </button>
 
       <Link to="/register">
-        <Style>Cadastre-se</Style>
+        <S.Style>Cadastre-se</S.Style>
       </Link>
-    </Container>
+    </S.Container>
   );
 }

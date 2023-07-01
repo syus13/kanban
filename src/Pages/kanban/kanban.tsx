@@ -1,76 +1,83 @@
-import {
-  Header,
-  TextHeader,
-  Welcome,
-  LinkEnd,
-  Main,
-  Column,
-  TitleColumn,
-} from "./styleKanban";
-import { CadCard } from "./cards/cadCard";
-import api from "../../services/requisicaoCards"
-import {useState, useEffect} from "react"
-import ReadCards from "../kanban/cards/readCard"
-import { Card as CardsType} from "../../services/types";
+import { ReactNode, useState, useEffect } from "react";
+import * as Styled from "./styleKanban";
+import getUser from "../../services/apiGetUser";
+import CadCard from "./cards/cadCard";
+import ReadCards from "./cards/readCard";
+import { Cards as CardsType } from "../../services/types";
 
-function filterByColumn(cards: CardsType, column: 'TODO'|'DOING'|'DONE'): CardsType {
-  return cards.filter(card => card.column === column)
+
+type ColumnProps = {
+  title: string;
+  children?: ReactNode;
+};
+
+function Column({ title, children }: ColumnProps) {
+  return (
+    <div className="column">
+      <Styled.TitleColumn>{title}</Styled.TitleColumn>
+      {children}
+    </div>
+  );
+}
+
+function filterByColumn(cards: CardsType, column: 'To Do'|'Doing'|'Done'): CardsType {
+  return cards.filter(card => card.column === column);
+}
 
 export default function Kanban() {
-
   const [userName, setUserName] = useState("");
 
+
   useEffect(() => {
-    
-    async function fetchUserName() {
+    const fetchUserName = async () => {
       try {
-        const response = await api.get("/user");
-        const userName = response.data.name; 
-        setUserName(userName);
+        const name = await getUser();
+        setUserName(name);
       } catch (error) {
         console.error("Erro ao buscar o nome do usuário:", error);
       }
-    }
+    };
+
+    
 
     fetchUserName();
+    
   }, []);
-
-
 
   return (
     <>
-      <Header>
-        <TextHeader>Arnia Trello</TextHeader>
-        <Welcome>
+      <Styled.Header>
+        <Styled.TextHeader>Arnia Trello</Styled.TextHeader>
+        <Styled.Welcome>
           <div className="welcomeUser">Olá, {userName}</div>
+          <Styled.LinkEnd>Sair</Styled.LinkEnd>
+        </Styled.Welcome>
+      </Styled.Header>
 
-          <LinkEnd>Sair</LinkEnd>
-        </Welcome>
-      </Header>
-
-      <Main>
-        <Column>
-          <TitleColumn>Novo</TitleColumn>
+      <Styled.Main>
+        <Styled.Column>
+          <Styled.TitleColumn>Novo</Styled.TitleColumn>
           <CadCard />
-        </Column>
+        </Styled.Column>
 
-        <Column>
-          <TitleColumn>To Do</TitleColumn>
-          <Cards cards={filterByColumn(cards, 'TODO')} />
-        </Column>
+        <Styled.Column>
+          <Column title="To Do">
+            <ReadCards  />
+          </Column>
+        </Styled.Column>
 
-        <Column>
-          <TitleColumn>Doing</TitleColumn>
-          <Cards cards={filterByColumn(cards, 'DOING')} />
-        </Column>
+        <Styled.Column>
+          <Column title="Doing">
+            <ReadCards  />
+          </Column>
+        </Styled.Column>
 
-        <Column>
-          <TitleColumn>Done</TitleColumn>
-          <Cards cards={filterByColumn(cards, 'DONE')} />
-        </Column>
-        
-      </Main>
+        <Styled.Column>
+          <Column title="Done">
+            <ReadCards  />
+          </Column>
+        </Styled.Column>
+      </Styled.Main>
     </>
   );
-}
 }

@@ -1,80 +1,94 @@
-import { useState } from "react";
-import { Card, Cards } from "../../../services/types"
-import { ReadCard as Rcard, Card as SCard } from "./styledCards"
+import { ReactNode, useState, useEffect } from "react";
+import * as Styled from "./styledCards"
 import * as Img from "../cards/cardImg"
-import { JSXElement } from "react";
-import * as api from "../../../services/requisicaoCards"
+import { Card } from "../../../services/types";
+import { isAxiosError } from "axios";
+import cardServicePut from "../../../services/apiPutCard";
+import getCard from "../../../services/apiGetCard";
+import { Card as CardsType } from "../../../services/types";
 
-type PropsReadCard = {
-    cards: Cards;
-}
 
-export default function ReadCards({cards}: PropsReadCard):JSXElement {
 
-    const [authToken, setAuthToken] = useState<string>(
-        localStorage.getItem("AUTH-TOKEN") || ""
+
+
+export default function ReadCards() {
+  const [updatedCards, setUpdatedCards] = useState<CardsType[]>([]);
+  const [cards, setCards] = useState<CardsType[]>([]);
+
+  async function moveTo(card: Card, direction: "left" | "right") {
+    let column = "";
+
+    if (card.column === "To Do") {
+      column = "Doing";
+    } else if (card.column === "Doing") {
+      column = direction === "left" ? "To Do" : "Done";
+    } else if (card.column === "Done") {
+      column = "Doing";
+    }
+
+    try {
+      const updatedCard = await cardServicePut(card.title, card.content,column);
+      const updatedCardList = updatedCards.map((cardId) =>
+        cardId._id === updatedCard._id ? updatedCard : cardId
       );
-
-    async function moveTo(card: Card, direction: 'left' | 'right') {
-        let column = '';
-    
-        if (card.column === 'TODO') {
-          column = 'DOING';
-        } else if (card.column === 'DONE') {
-          column = 'DOING';
-        } else {
-          column = direction === 'left' ? 'TODO' : 'DONE';
-        }
-    
-        try {
-          const response = await api.put(`/card/${card._id}`, {
-            title: card.title,
-            content: card.content,
-            column: column
-          });
-    
-          // Lide com a resposta da requisição como desejar
-          console.log('Card movido com sucesso:', response.data);
-    
-        } catch (error) {
-          // Lide com erros na requisição, como falhas de conexão, erros de servidor, etc.
-          console.error('Erro ao mover o card:', error);
-        }
+      setUpdatedCards(updatedCardList);
+      
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.error(error.response?.data);
       }
-        }
+    }
+  }
 
-    
+console.log("cards", cards)
 
-    return (
-        <RCard>
-        {cards.map((card) => (
-          <SCard className="card" key={card._id}>
-            <div className="title">
-              <div>{card.title}</div>
-              <img src={Img.editar} alt="Editar" />
-            </div>
+useEffect (()=> {
+
+  const fetchCards = async () => {
+    try {
+      // Substitua esta chamada pela lógica de busca dos cards da API
+      const fetchedCards = await getCard();
+      setCards(fetchedCards);
   
-            <div className="content">{card.column}</div>
-            <div className="changeColumn">
-              {card.column !== "TODO" && (
-                <img
-                  src={Img.voltar}
-                  alt="Mover para a esquerda"
-                  onClick={() => moveTo(card, "left")}
-                />
-              )}
-              {card.column !== "DONE" && (
-                <img
-                  src={Img.avançar}
-                  alt="Mover para a direita"
-                  onClick={() => moveTo(card, "right")}
-                />
-              )}
-            </div>
-          </SCard>
-        ))}
-      </RCard>
-    )
+     
+    } catch (error) {
+      console.error("Erro ao buscar os cards:", error);
+    }
+  };
   
-    
+  fetchCards();
+},[])
 
+
+  return (
+    <Styled.ReadCard>
+      {cards.map((card) => (
+        <Styled.Card className="card" key={card._id}>
+          <div className="title">
+            <div>{card.title}</div>
+            <img src={Img.editar} alt="Editar" />
+          </div>
+
+          <div className="content">{card.column}</div>
+          <div className="changeColumn">
+            {card.column !== "To Do" && (
+              <img
+                src={Img.voltar}
+                alt="Mover para a esquerda"
+                onClick={() => moveTo(card, "left")}
+              />
+            )}
+            {card.column !== "Done" && (
+              <img
+                src={Img.avançar}
+                alt="Mover para a direita"
+                onClick={() => moveTo(card, "right")}
+              />
+            )}
+          </div>
+        </Styled.Card>
+      ))}
+    </Styled.ReadCard>
+  )
+
+}
